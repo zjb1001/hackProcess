@@ -2,14 +2,13 @@
 #include <stdlib.h>
 #include "process_utils.h"
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <process_name>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
-
+int main() {
+    const char* process_name = "hello";
+    
+    printf("Looking for process: %s\n", process_name);
+    
     // Find process by name
-    ProcessInfo* target = find_process_by_name(argv[1]);
+    ProcessInfo* target = find_process_by_name(process_name);
     if (!target) {
         fprintf(stderr, "Process '%s' not found\n", argv[1]);
         return EXIT_FAILURE;
@@ -25,13 +24,17 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Example: Read and modify an integer value
-    int* value_ptr = (int*)mapped_memory;
-    printf("Current value at address 0x%lx: %d\n", target->addr, *value_ptr);
+    // Read and modify the counter value
+    int* counter_ptr = (int*)mapped_memory;
+    printf("Current counter value: %d\n", *counter_ptr);
     
-    // Modify the value
-    *value_ptr = 42;
-    printf("Modified value to: %d\n", *value_ptr);
+    // Modify the counter
+    *counter_ptr = 1000;
+    printf("Modified counter value to: %d\n", *counter_ptr);
+    
+    // Wait a bit and read again to verify
+    sleep(1);
+    printf("Verifying counter value: %d\n", *counter_ptr);
 
     // Cleanup
     unmap_process_memory(mapped_memory, target->size);
