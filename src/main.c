@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "process_utils.h"
 
-int main() {
+int main(int argc, char* argv[]) {
     const char* process_name = "hello";
     
     printf("Looking for process: %s\n", process_name);
